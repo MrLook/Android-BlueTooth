@@ -279,6 +279,7 @@ public class MyBluetoothChatActivity extends Activity {
                 //String currentItem = mConversationArrayAdapter.getItem(mConversationArrayAdapter.getCount()-1);
                 //currentItem = currentItem + readMessage;
 				// mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                //GIT TEST
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
