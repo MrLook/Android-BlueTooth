@@ -272,6 +272,12 @@ public class MyBluetoothChatActivity extends Activity {
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 mInEditText.append(readMessage);
+                // mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
+                //GIT TEST
+                //eugene
+                //GIT TEST
+                //GIT TEST
+                //GIT TEST
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
