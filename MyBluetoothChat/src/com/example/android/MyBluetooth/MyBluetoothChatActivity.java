@@ -16,11 +16,17 @@
 
 package com.example.android.MyBluetooth;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -83,6 +89,9 @@ public class MyBluetoothChatActivity extends Activity {
     // Member object for the chat services
     private BluetoothChatService mChatService = null;
 
+    boolean mExternalStorageAvailable = false;
+	boolean mExternalStorageWriteable = false;
+	String state = Environment.getExternalStorageState();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +124,19 @@ public class MyBluetoothChatActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new MyOnItemSelectedListener());
+        
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // We can read and write the media
+            mExternalStorageAvailable = mExternalStorageWriteable = true;
+        } else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            // We can only read the media
+            mExternalStorageAvailable = true;
+            mExternalStorageWriteable = false;
+        } else {
+            // Something else is wrong. It may be one of many other states, but all we need
+            //  to know is we can neither read nor write
+            mExternalStorageAvailable = mExternalStorageWriteable = false;
+        }
     }
 
     @Override
@@ -191,8 +213,10 @@ public class MyBluetoothChatActivity extends Activity {
 
     @Override
     public void onStop() {
+    	
         super.onStop();
         if(D) Log.e(TAG, "-- ON STOP --");
+        
     }
 
     @Override
@@ -378,5 +402,31 @@ public class MyBluetoothChatActivity extends Activity {
           // Do nothing.
         }
     }
+    
+    public void captureLog (View v){
+    	if (mExternalStorageAvailable && mExternalStorageWriteable){
+    		File root = Environment.getExternalStorageDirectory();
+    		File file = new File(root, "CapturedLog.txt");
+    		 try {
+    		FileWriter filewriter = new FileWriter(file);
+            BufferedWriter out = new BufferedWriter(filewriter);
+            out.write(mInEditText.getText().toString());
+            out.close();
+            Toast.makeText(this, "Write to File Successful", Toast.LENGTH_SHORT).show();
+    		 } catch (IOException e) {
+                 Log.e("TAG", "Could not write file " + e.getMessage());
+                 Toast.makeText(this, "Could not write to file", Toast.LENGTH_SHORT).show();
+             }
+    		
+    	}
+    	else if(mExternalStorageAvailable && !mExternalStorageWriteable)  {
+    		Toast.makeText(this, "SDCard available but could not write to file", Toast.LENGTH_SHORT).show();
+    	}
+    	else {
+    		Toast.makeText(this, "SDCard unavailable. Could not write to file", Toast.LENGTH_SHORT).show();
+    	}
+    	
+    }
+    
 
 }
