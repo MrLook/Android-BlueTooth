@@ -32,8 +32,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +60,7 @@ public class MyBluetoothChatActivity extends Activity {
     // Key names received from the BluetoothChatService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
-
+    
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
@@ -104,6 +108,13 @@ public class MyBluetoothChatActivity extends Activity {
             finish();
             return;
         }
+        
+        Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.commands_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new MyOnItemSelectedListener());
     }
 
     @Override
@@ -214,7 +225,6 @@ public class MyBluetoothChatActivity extends Activity {
         }
 
         // Check that there's actually something to send
-        if (message.length() > 0) {
         	message = message + "\r";	//vlooksss add a carriage return for EV50 diagnostics
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
@@ -223,7 +233,6 @@ public class MyBluetoothChatActivity extends Activity {
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
             mOutEditText.setText(mOutStringBuffer);
-        }
     }
 
     // The action listener for the EditText widget, to listen for the return key
@@ -266,6 +275,7 @@ public class MyBluetoothChatActivity extends Activity {
                 byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
                 String writeMessage = new String(writeBuf);
+                //mInEditText.append("\r\nCmd Sent: "+writeMessage + "\r\n");
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
@@ -273,11 +283,6 @@ public class MyBluetoothChatActivity extends Activity {
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 mInEditText.append(readMessage);
                 // mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
-                //GIT TEST
-                //eugene
-                //GIT TEST
-                //GIT TEST
-                //GIT TEST
                 break;
             case MESSAGE_DEVICE_NAME:
                 // save the connected device's name
@@ -343,6 +348,35 @@ public class MyBluetoothChatActivity extends Activity {
             return true;
         }
         return false;
+    }
+    
+    public class MyOnItemSelectedListener implements OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent,
+            View view, int pos, long id) {
+          
+             switch ( pos )
+             {
+             case 0:
+            	 sendMessage("?");
+            	 break;
+             case 1:
+            	 sendMessage("");
+            	 break;
+             case 2:
+            	 sendMessage("c90");
+            	 break;
+             case 3:
+            	 sendMessage("c100");
+            	 break;
+             default:
+            	 break;
+             }
+        }
+
+        public void onNothingSelected(AdapterView parent) {
+          // Do nothing.
+        }
     }
 
 }

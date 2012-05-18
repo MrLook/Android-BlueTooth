@@ -37,4 +37,13 @@
     <!-- Options Menu -->
     <string name="connect">Connect a device</string>
     <string name="discoverable">Make discoverable</string>
+    
+    <!-- Command Options -->
+    <string-array name="commands_array">
+        <item>Help</item>
+        <item>Get Status</item>
+        <item>Set Current to 90</item>
+        <item>Set Current t0 100</item>
+    </string-array>
+    
 </resources>

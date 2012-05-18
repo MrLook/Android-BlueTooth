@@ -17,6 +17,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/tb_Input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.00"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="textMultiLine"
+        android:keepScreenOn="true"
+        android:linksClickable="false"
+        android:longClickable="false"
+        android:maxLines="10"
+        android:overScrollMode="always"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:scrollbars="vertical" >
+
+        <requestFocus />
+    </EditText>
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,20 +62,5 @@
             android:layout_height="wrap_content"
             android:text="@string/send" />
     </LinearLayout>
-
-    <EditText
-        android:id="@+id/tb_Input"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:inputType="textMultiLine"
-        android:keepScreenOn="true"
-        android:maxLines="10"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbars="vertical" android:focusable="false" android:focusableInTouchMode="false" android:linksClickable="false" android:longClickable="false" android:overScrollMode="always">
-		android:editable="false"
-        <requestFocus />
-    </EditText>
 
 </LinearLayout>
