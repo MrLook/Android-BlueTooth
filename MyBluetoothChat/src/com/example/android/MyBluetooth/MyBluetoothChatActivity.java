@@ -20,6 +20,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -402,17 +403,18 @@ public class MyBluetoothChatActivity extends Activity {
           // Do nothing.
         }
     }
-    
     public void captureLog (View v){
     	if (mExternalStorageAvailable && mExternalStorageWriteable){
     		File root = Environment.getExternalStorageDirectory();
-    		File file = new File(root, "CapturedLog.txt");
+    		File dir = new File (root.getAbsolutePath() + "/SerialBluetoothLogs");
+    		dir.mkdirs();
+    		File file = new File(dir, "CapturedLog_"+Calendar.HOUR+""+Calendar.MINUTE+".txt");
     		 try {
     		FileWriter filewriter = new FileWriter(file);
             BufferedWriter out = new BufferedWriter(filewriter);
             out.write(mInEditText.getText().toString());
             out.close();
-            Toast.makeText(this, "Write to File Successful", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Write to File Successful " + file.length() + " bytes", Toast.LENGTH_SHORT).show();
     		 } catch (IOException e) {
                  Log.e("TAG", "Could not write file " + e.getMessage());
                  Toast.makeText(this, "Could not write to file", Toast.LENGTH_SHORT).show();
