@@ -40,6 +40,7 @@
     
     <!-- Command Options -->
     <string-array name="commands_array">
+        <item>Select a Command</item>
         <item>Help</item>
         <item>Get Status</item>
         <item>Set Current to 90</item>

@@ -33,10 +33,7 @@
         android:longClickable="false"
         android:overScrollMode="always"
         android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:scrollbars="vertical" >
-
-        <requestFocus />
-    </EditText>
+        android:scrollbars="vertical" />
 
     <Spinner
         android:id="@+id/spinner1"
@@ -53,21 +50,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="1" />
-
+            android:layout_weight="1"
+            android:hint="" />
+
         <Button
             android:id="@+id/button_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="0.30"
             android:text="@string/send" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="captureLog"
-            android:text="Capture Log" />
 
-    </LinearLayout>
+	</LinearLayout>
 
 </LinearLayout>

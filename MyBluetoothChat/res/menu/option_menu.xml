@@ -20,4 +20,11 @@
     <item android:id="@+id/discoverable"
           android:icon="@android:drawable/ic_menu_mylocation"
           android:title="@string/discoverable" />
+    <item android:id="@+id/clearText"
+          android:icon="@android:drawable/ic_menu_delete"
+          android:title="Clear Text" />
+    <item android:id="@+id/captureLog"
+          android:icon="@android:drawable/ic_menu_save"
+          android:title="Capture Log" />
+    
 </menu>

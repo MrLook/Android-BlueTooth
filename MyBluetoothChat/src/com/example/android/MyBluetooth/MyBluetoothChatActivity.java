@@ -93,6 +93,11 @@ public class MyBluetoothChatActivity extends Activity {
     boolean mExternalStorageAvailable = false;
 	boolean mExternalStorageWriteable = false;
 	String state = Environment.getExternalStorageState();
+	
+	public static final int maxTextLen = 500; //in kilobytes
+	
+	public int month, day, year, hour, minute;
+	
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,6 +143,14 @@ public class MyBluetoothChatActivity extends Activity {
             //  to know is we can neither read nor write
             mExternalStorageAvailable = mExternalStorageWriteable = false;
         }
+        
+        Calendar clndr = Calendar.getInstance(); 
+        month = clndr.get(Calendar.MONTH)+1;
+        day = clndr.get(Calendar.DATE);
+		year = clndr.get(Calendar.YEAR);
+		hour = clndr.get(Calendar.HOUR_OF_DAY);
+		minute = clndr.get(Calendar.MINUTE);
+        
     }
 
     @Override
@@ -297,16 +310,22 @@ public class MyBluetoothChatActivity extends Activity {
                 }
                 break;
             case MESSAGE_WRITE:
-                byte[] writeBuf = (byte[]) msg.obj;
+                //byte[] writeBuf = (byte[]) msg.obj;
                 // construct a string from the buffer
-                String writeMessage = new String(writeBuf);
+                //String writeMessage = new String(writeBuf);
                 //mInEditText.append("\r\nCmd Sent: "+writeMessage + "\r\n");
                 break;
             case MESSAGE_READ:
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
+                int inTextLen = mInEditText.length();
+                if (inTextLen >= (maxTextLen*1000) ){
+                	captureLogFcn();
+                	mInEditText.setText("");
+                }
                 mInEditText.append(readMessage);
+                
                 // mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
                 break;
             case MESSAGE_DEVICE_NAME:
@@ -371,6 +390,13 @@ public class MyBluetoothChatActivity extends Activity {
             // Ensure this device is discoverable by others
             ensureDiscoverable();
             return true;
+        case R.id.captureLog:
+        	captureLogFcn ();
+            return true;
+        case R.id.clearText:
+        	mInEditText.setText("");
+            return true;
+         
         }
         return false;
     }
@@ -383,15 +409,18 @@ public class MyBluetoothChatActivity extends Activity {
              switch ( pos )
              {
              case 0:
-            	 sendMessage("?");
+            	 //Nothing selected
             	 break;
              case 1:
-            	 sendMessage("");
+            	 sendMessage("?");
             	 break;
              case 2:
-            	 sendMessage("c90");
+            	 sendMessage("");
             	 break;
              case 3:
+            	 sendMessage("c90");
+            	 break;
+             case 4:
             	 sendMessage("c100");
             	 break;
              default:
@@ -399,22 +428,24 @@ public class MyBluetoothChatActivity extends Activity {
              }
         }
 
-        public void onNothingSelected(AdapterView parent) {
+        public void onNothingSelected(AdapterView<?> parent) {
           // Do nothing.
         }
     }
-    public void captureLog (View v){
+
+    public void captureLogFcn (){
     	if (mExternalStorageAvailable && mExternalStorageWriteable){
     		File root = Environment.getExternalStorageDirectory();
-    		File dir = new File (root.getAbsolutePath() + "/SerialBluetoothLogs");
+    		File dir = new File (root.getAbsolutePath() + "/aSerialBluetoothLogs"); //a used for testing to make it easier to find folder
     		dir.mkdirs();
-    		File file = new File(dir, "CapturedLog_"+Calendar.HOUR+""+Calendar.MINUTE+".txt");
+    		String filename = "CapturedLog_"+month+"_"+day+"_"+year+"_"+hour+""+minute+".txt";
+    		File file = new File(dir, filename);
     		 try {
-    		FileWriter filewriter = new FileWriter(file);
+    		FileWriter filewriter = new FileWriter(file, true);
             BufferedWriter out = new BufferedWriter(filewriter);
             out.write(mInEditText.getText().toString());
             out.close();
-            Toast.makeText(this, "Write to File Successful " + file.length() + " bytes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Write to "+ filename +" Successful " + file.length() + " bytes", Toast.LENGTH_SHORT).show();
     		 } catch (IOException e) {
                  Log.e("TAG", "Could not write file " + e.getMessage());
                  Toast.makeText(this, "Could not write to file", Toast.LENGTH_SHORT).show();
@@ -429,6 +460,5 @@ public class MyBluetoothChatActivity extends Activity {
     	}
     	
     }
-    
 
 }
