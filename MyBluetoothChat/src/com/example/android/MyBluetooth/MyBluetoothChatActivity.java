@@ -319,11 +319,11 @@ public class MyBluetoothChatActivity extends Activity {
                 byte[] readBuf = (byte[]) msg.obj;
                 // construct a string from the valid bytes in the buffer
                 String readMessage = new String(readBuf, 0, msg.arg1);
-                int inTextLen = mInEditText.length();
-                if (inTextLen >= (maxTextLen*1000) ){
-                	captureLogFcn();
-                	mInEditText.setText("");
-                }
+                //int inTextLen = mInEditText.length();
+                //if (inTextLen >= (maxTextLen*1000) ){
+                //	captureLogFcn();
+                //	mInEditText.setText("");
+                //}
                 mInEditText.append(readMessage);
                 
                 // mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
@@ -418,10 +418,22 @@ public class MyBluetoothChatActivity extends Activity {
             	 sendMessage("");
             	 break;
              case 3:
-            	 sendMessage("c90");
+            	 sendMessage("C125");
             	 break;
              case 4:
-            	 sendMessage("c100");
+            	 sendMessage("c120");
+            	 break;
+             case 5:
+            	 sendMessage("c10");
+            	 break;
+             case 6:
+            	 sendMessage("V500");
+            	 break;
+             case 7:
+            	 sendMessage("v300");
+            	 break;
+             case 8:
+            	 sendMessage("s3600");
             	 break;
              default:
             	 break;

@@ -43,8 +43,12 @@
         <item>Select a Command</item>
         <item>Help</item>
         <item>Get Status</item>
-        <item>Set Current to 90</item>
-        <item>Set Current t0 100</item>
+        <item>Set Max Current to 125</item>
+        <item>Set Min Current to 120</item>
+        <item>Set Min Current to 10</item>
+        <item>Set Max Voltage to 500</item>
+        <item>Set Min Voltage to 300</item>
+        <item>Set Seconds to 3600</item>
     </string-array>
     
 </resources>
