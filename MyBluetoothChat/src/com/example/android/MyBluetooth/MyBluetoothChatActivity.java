@@ -25,11 +25,13 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -98,6 +100,7 @@ public class MyBluetoothChatActivity extends Activity {
 	
 	public int month, day, year, hour, minute;
 	
+	private PowerManager.WakeLock mWakeLock;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -150,6 +153,9 @@ public class MyBluetoothChatActivity extends Activity {
 		year = clndr.get(Calendar.YEAR);
 		hour = clndr.get(Calendar.HOUR_OF_DAY);
 		minute = clndr.get(Calendar.MINUTE);
+		
+		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "DoNotDimScreen");
         
     }
 
@@ -173,7 +179,7 @@ public class MyBluetoothChatActivity extends Activity {
     public synchronized void onResume() {
         super.onResume();
         if(D) Log.e(TAG, "+ ON RESUME +");
-
+        mWakeLock.acquire();
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
@@ -223,6 +229,7 @@ public class MyBluetoothChatActivity extends Activity {
     public synchronized void onPause() {
         super.onPause();
         if(D) Log.e(TAG, "- ON PAUSE -");
+        mWakeLock.release();
     }
 
     @Override
@@ -448,7 +455,7 @@ public class MyBluetoothChatActivity extends Activity {
     public void captureLogFcn (){
     	if (mExternalStorageAvailable && mExternalStorageWriteable){
     		File root = Environment.getExternalStorageDirectory();
-    		File dir = new File (root.getAbsolutePath() + "/aSerialBluetoothLogs"); //a used for testing to make it easier to find folder
+    		File dir = new File (root.getAbsolutePath() + "/SerialBluetoothLogs");
     		dir.mkdirs();
     		String filename = "CapturedLog_"+month+"_"+day+"_"+year+"_"+hour+""+minute+".txt";
     		File file = new File(dir, filename);
